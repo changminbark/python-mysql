@@ -21,13 +21,13 @@ services:
     depends_on:
       - db
     environment:
-      - DB_HOST: ${DB_HOST}
-      - DB_NAME: ${DB_NAME}
-      - DB_USER: ${MYSQL_USER}
-      - DB_PASSWORD: ${MYSQL_PASSWORD}
-      - DB_PORT: ${DB_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      DB_PORT: ${DB_PORT}
     ports:
     - "8000:8000"
 
 volumes:
-  db-data:
+  mysql-data:

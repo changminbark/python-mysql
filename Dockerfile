@@ -1,3 +1,4 @@
+# This dockerfile is for the FastAPI server
 FROM python:3.12-slim
 
 WORKDIR /code

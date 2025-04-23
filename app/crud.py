@@ -1,8 +1,11 @@
-from sqlalchemy.orm import Session
 from app.models import Task
 
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
 def get_tasks(db: Session):
-    return db.query(Task).all()
+    statement = select(Task)
+    return db.scalars(statement).all()
 
 def create_task(db: Session, title: str):
     task = Task(title=title)

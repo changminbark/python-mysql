@@ -1,11 +1,12 @@
 import os
 from pydantic_settings import BaseSettings
 
-# Load in .env 
+# Load in .env (for local testing)
 from dotenv import load_dotenv
 dotenv_path = os.path.join("../.env")
 load_dotenv(dotenv_path)
 
+# This saves the environment variables in this class
 class Settings(BaseSettings):
     db_host: str
     db_name: str
@@ -18,3 +19,4 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
 
 settings = Settings()
+

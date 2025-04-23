@@ -16,5 +16,5 @@ mysql -h 127.0.0.1 -P 3306 -u root -p # from the host
 ```
 OR
 ```bash
-docker exec -it mysql-container mysql -u root -p # from inside the container
+sudo docker exec -it mysql-db mysql -u root -p  
 ```

@@ -24,3 +24,14 @@ def read_tasks(db: Session = Depends(get_db)):
 def add_task(title: str, db: Session = Depends(get_db)):
     return crud.create_task(db, title)
 
+@app.get("/users")
+def read_users(db: Session = Depends(get_db)):
+    return crud.get_users(db)
+
+@app.get("/processlist")
+def read_processlist(db: Session = Depends(get_db)):
+    return crud.get_processlist(db)
+
+@app.get("/top_queries")
+def read_top_queries(db: Session = Depends(get_db)):
+    return crud.get_top_queries(db)

@@ -9,6 +9,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+# This provides a db session to whatever function needs it and then closes it afterwards (when it returns to get_db())
 def get_db():
     db = SessionLocal()
     try:
@@ -35,3 +36,11 @@ def read_processlist(db: Session = Depends(get_db)):
 @app.get("/top_queries")
 def read_top_queries(db: Session = Depends(get_db)):
     return crud.get_top_queries(db)
+
+@app.get("/replication_members")
+def read_replication_members(db: Session = Depends(get_db)):
+    return crud.get_replication_members(db)
+
+@app.get("/top_slow_queries")
+def read_top_slow_queries():
+    return crud.get_top_slow_queries()

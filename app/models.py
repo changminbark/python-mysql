@@ -1,6 +1,9 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, MetaData
 from app.db import Base
 
+# This task model inherits from the declarative_base class
+# It defines a schema of how an entry in a table, which has a name of "tasks"
+# should look like
 class Task(Base):
     __tablename__ = "tasks"
 

@@ -67,12 +67,14 @@ You need to manually grant other privileges, such as
 GRANT PROCESS, SELECT, REPLICATION CLIENT ON *.* TO 'taskuser'@'%';
 
 -- THE FOLLOWING IS RELEVANT FOR QUERYING SYS IN DOCKER CONTAINERS
+-- This is needed so that the **definer** of the view (mysql.sys@local), which may not exist in Docker containers, is not used anymore as SQL SECURITY INVOKER makes it ignore the definer's privileges. The definer is the user that was logged into when the command below was run.
+
 -- For recreating the sys.statement_analysis, run
 SHOW CREATE VIEW sys.statement_analysis\G
--- Then using this output, recreate the view
-DROP VIEW IF EXISTS sys.statement_analysis;
-CREATE ALGORITHM=MERGE
-SQL SECURITY INVOKER
+-- Then using this output (Create View), recreate the view
+DROP VIEW IF EXISTS sys.statement_analysis; -- Deleting view here
+CREATE ALGORITHM=MERGE -- Specify how MySQL internally processes view query
+SQL SECURITY INVOKER -- Deactivates definer's privileges
 VIEW sys.statement_analysis (
   query, db, full_scan, exec_count, err_count, warn_count,
   total_latency, max_latency, avg_latency, lock_latency, cpu_latency,
@@ -110,6 +112,7 @@ SELECT
   ps.LAST_SEEN AS last_seen
 FROM performance_schema.events_statements_summary_by_digest AS ps
 ORDER BY ps.SUM_TIMER_WAIT DESC;
+
 -- Grant necessary privileges
 GRANT SELECT, SHOW VIEW ON performance_schema.* TO 'taskuser'@'%';
 GRANT EXECUTE ON sys.* TO 'taskuser'@'%';
@@ -423,13 +426,13 @@ Filtering can be done at different stages of performance monitoring:
 
 5. Once a root cause of performance bottleneck is identified, take the appropriate corrective action, such as:
 
-    - Tune the server parameters (cache sizes, memory, and so forth).
+- Tune the server parameters (cache sizes, memory, and so forth).
 
-    - Tune a query by writing it differently,
+- Tune a query by writing it differently,
 
-    - Tune the database schema (tables, indexes, and so forth).
+- Tune the database schema (tables, indexes, and so forth).
 
-    - Tune the code (this applies to storage engine or server developers only). 
+- Tune the code (this applies to storage engine or server developers only). 
 
 6. Start again at step 1, to see the effects of the changes on performance. 
 

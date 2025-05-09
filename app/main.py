@@ -44,3 +44,7 @@ def read_replication_members(db: Session = Depends(get_db)):
 @app.get("/top_slow_queries")
 def read_top_slow_queries():
     return crud.get_top_slow_queries()
+
+@app.get("/top_slow_tables")
+def read_top_slow_tables(db: Session = Depends(get_db)):
+    return crud.get_top_slow_tables(db)

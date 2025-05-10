@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:latest
-    container_name: mysql-db
+    image: percona/percona-server:8.0
+    container_name: percona-db
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
@@ -13,13 +13,13 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./my.cnf:/etc/mysql/conf.d/my.cnf:ro
+      - ./my.cnf:/etc/my.cnf:ro  # Percona prefers /etc/my.cnf over /etc/mysql/conf.d/
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 20s
       timeout: 5s
       retries: 5
-  
+
   api:
     build: .
     container_name: fastapi-server
@@ -38,8 +38,8 @@ services:
     image: prom/mysqld-exporter
     container_name: mysql-exporter
     command:
-      - "--mysqld.username=taskuser:taskpass" 
-      - "--mysqld.address=db:3306"   
+      - "--mysqld.username=taskuser:taskpass"
+      - "--mysqld.address=db:3306"
     depends_on:
       - db
     ports:
